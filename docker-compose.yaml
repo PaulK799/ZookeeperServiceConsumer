@@ -1,0 +1,16 @@
+version: '2'
+services:
+  # Entry API (ZookeeperServiceConsumer)
+  zookeeperserviceconsumer:
+    build:
+      context: .
+    environment:
+      - _JAVA_OPTIONS=-Dspring.cloud.zookeeper.connect-string=zookeeper:2181 -Dspring.cloud.zookeeper.enabled=true -Dspring.cloud.zookeeper.discovery.enabled=true
+    image: entryapiconsumer
+    ports:
+      - 8081:8081
+    networks:
+      - spring-template-network
+networks:
+  spring-template-network:
+    external: true

@@ -27,6 +27,57 @@ spring.cloud.zookeeper.connect-string=localhost:2181
 
 ---
 
+# Dockerize the EntryAPI Consumer into a Docker Container
+## Create Docker Image of EntryAPI
+1. First you need to generate a jar of the latest version of the application. This can be done via maven with the following
+   command:
+
+```shell
+> ./mvnw clean package
+```
+
+2. Verify the jar starts up correctly
+
+```shell
+> java -jar target/demo<insert version>.jar
+```
+
+Example: `java -jar target/demo-0.0.1-SNAPSHOT.jar`.
+
+3. Create the `Docker` Image
+
+```shell
+> docker build --tag=entryapiconsumer .
+```
+
+4. Pull down additional docker images from the `Docker` hub.
+```shell
+> docker pull zookeeper 
+```
+
+4. Compose `Docker` container
+```shell
+> docker-compose up
+```
+
+5. Verify `Docker` containers are up and running
+
+```shell
+> docker ps -a
+```
+
+Expected output should be as follows:
+```shell 
+CONTAINER ID   IMAGE              COMMAND                  CREATED             STATUS                        PORTS                                                  NAMES
+3e1a37148a36   entryapi           "java -jar demo-0.0.…"   30 minutes ago      Up 28 seconds                 0.0.0.0:8080->8080/tcp                                 springbootprojecttemplate_entryapi_1
+1fb96e094beb   zookeeper          "/docker-entrypoint.…"   30 minutes ago      Up 28 seconds                 2888/tcp, 3888/tcp, 0.0.0.0:2181->2181/tcp, 8080/tcp   springbootprojecttemplate_zookeeper_1
+b30a9622838a   redis              "docker-entrypoint.s…"   30 minutes ago      Up 28 seconds                 0.0.0.0:6379->6379/tcp                                 springbootprojecttemplate_redis_1
+4b9d0bec32a6   entryapiconsumer   "java -jar demo-0.0.…"   About an hour ago   Up 17 seconds                 0.0.0.0:8081->8081/tcp                                 zookeeperserviceconsumer_zookeeperserviceconsumer_1
+
+```
+
+---
+
 # Entry API
 
 Below you will find the API definition for the `Entry API` which has been implemented as part of
